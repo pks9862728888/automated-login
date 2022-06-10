@@ -1,4 +1,4 @@
-package com.demo.automatedlogin.services;
+package com.demo.automatedlogin.server.services;
 
 import com.demo.automatedlogin.dao.People;
 import org.springframework.stereotype.Service;

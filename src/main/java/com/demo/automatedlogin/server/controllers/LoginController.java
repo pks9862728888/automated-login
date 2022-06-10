@@ -1,14 +1,11 @@
-package com.demo.automatedlogin.controllers;
+package com.demo.automatedlogin.server.controllers;
 
-import com.demo.automatedlogin.services.LoginService;
+import com.demo.automatedlogin.server.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -18,9 +15,9 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
-        Optional<String> login = loginService.login(username, password);
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestBody formData) {
+        Optional<String> login = loginService.login(formData.username, formData.password);
 
         if (login.isEmpty()) {
             // Login failed
@@ -34,5 +31,26 @@ public class LoginController {
                     .header(HttpHeaders.COOKIE, login.get())
                     .body("Login Successful");
         }
+    }
+}
+
+class LoginRequestBody {
+    String username;
+    String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

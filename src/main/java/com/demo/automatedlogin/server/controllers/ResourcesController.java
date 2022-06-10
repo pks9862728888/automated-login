@@ -1,8 +1,8 @@
-package com.demo.automatedlogin.controllers;
+package com.demo.automatedlogin.server.controllers;
 
 import com.demo.automatedlogin.dao.People;
-import com.demo.automatedlogin.services.DataService;
-import com.demo.automatedlogin.services.LoginService;
+import com.demo.automatedlogin.server.services.DataService;
+import com.demo.automatedlogin.server.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class ResourcesController {
     public ResponseEntity<People> create(@RequestBody People peopleData,
                                          @RequestHeader("Cookie") String cookie) {
         // 401 if session expired
-        if (!loginService.checkLogin(cookie)) {
+        if (!loginService.isLoginExpired(cookie)) {
             return loginService.getUnauthorizedResponse();
         }
 
@@ -38,7 +38,7 @@ public class ResourcesController {
     @RequestMapping(value = "/find/{id}", method = RequestMethod.GET)
     public ResponseEntity<People> find(@PathVariable("id") int id, @RequestHeader("Cookie") String cookie) {
         // 401 if session expired
-        if (!loginService.checkLogin(cookie)) {
+        if (!loginService.isLoginExpired(cookie)) {
             return loginService.getUnauthorizedResponse();
         }
 
@@ -58,7 +58,7 @@ public class ResourcesController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable("id") int id, @RequestHeader("Cookie") String cookie) {
         // 401 if session expired
-        if (!loginService.checkLogin(cookie)) {
+        if (!loginService.isLoginExpired(cookie)) {
             return loginService.getUnauthorizedResponse();
         }
 
@@ -75,9 +75,9 @@ public class ResourcesController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ResponseEntity<List<People>> create(@RequestHeader("Cookie") String cookie) {
+    public ResponseEntity<List<People>> listAll(@RequestHeader("Cookie") String cookie) {
         // 401 if session expired
-        if (!loginService.checkLogin(cookie)) {
+        if (!loginService.isLoginExpired(cookie)) {
             return loginService.getUnauthorizedResponse();
         }
 

@@ -1,9 +1,10 @@
-package com.demo.automatedlogin.services;
+package com.demo.automatedlogin.server.services;
 
-import com.demo.automatedlogin.dao.People;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,13 +20,15 @@ public class LoginService {
 
     private static final Object LOCK = new Object();
 
+    @Value("${username}")
+    private String USERNAME;
+
+    @Value("${password}")
+    private String PASSWORD;
+
     private volatile String SESSION_COOKIE = "";
 
-    private static final String USERNAME = "root";
-
-    private static final String PASSWORD = "toor";
-
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 20000)
     void refreshCookie() {
         synchronized (LOCK) {
             this.SESSION_COOKIE = String.valueOf(UUID.randomUUID());
@@ -44,9 +47,12 @@ public class LoginService {
         return Optional.empty();
     }
 
-    public boolean checkLogin(String sessionToken) {
+    public boolean isLoginExpired(@Nullable String sessionToken) {
         synchronized (LOCK) {
-            return !Objects.isNull(sessionToken) && SESSION_COOKIE.equals(sessionToken);
+            if (Objects.nonNull(sessionToken) && sessionToken.contains("Cookie=")) {
+                sessionToken = sessionToken.substring(Math.max(0, sessionToken.indexOf("Cookie=") + 7));
+            }
+            return Objects.nonNull(sessionToken) && SESSION_COOKIE.equals(sessionToken);
         }
     }
 
