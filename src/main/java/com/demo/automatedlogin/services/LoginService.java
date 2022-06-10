@@ -1,6 +1,9 @@
 package com.demo.automatedlogin.services;
 
+import com.demo.automatedlogin.dao.People;
 import lombok.NonNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -47,4 +50,9 @@ public class LoginService {
         }
     }
 
+    public ResponseEntity getUnauthorizedResponse() {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .build();
+    }
 }
