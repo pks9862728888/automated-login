@@ -19,6 +19,11 @@ public class RequestPayloadCreatorService {
                 username, password);
     }
 
+    public String getCreatePeoplePayload(@NonNull String name, int age) throws RequestException {
+        return String.format(getPayloadElseFail("createPeoplePayload.json"),
+                name, age);
+    }
+
     private String getPayloadElseFail(@NonNull String payloadFileName) throws RequestException {
         try {
             return fileService.getJsonRequestPayload(payloadFileName);

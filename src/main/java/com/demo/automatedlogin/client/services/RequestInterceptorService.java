@@ -39,10 +39,13 @@ public class RequestInterceptorService {
                     response = restAssuredService.makePostRequest(Objects.requireNonNull(payload), url, cookie);
                     break;
                 case PUT:
+                    // TODO: Create service method in restAssured Service
                     break;
                 case PATCH:
+                    // TODO: Create service method in restAssured Service
                     break;
                 case DELETE:
+                    // TODO: Create service method in restAssured Service
                     break;
                 default:
                     throw new RequestException("Unknown Request method: " + requestMethod);
